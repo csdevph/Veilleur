@@ -6,6 +6,12 @@
         internal override EtatSession EtatSuivant() => new enPause(sess, 7);
     }
 
+    internal class EtatFinal : EtatSession
+    {
+        public EtatFinal(Session s) : base(s, 0) { }
+        internal override EtatSession EtatSuivant() => this;
+    }
+
     internal class enPause : EtatSession
     {
         public enPause(Session s, int m) : base(s, m) { }
@@ -27,6 +33,6 @@
     internal class enSursis : EtatSession
     {
         public enSursis(Session s, int m) : base(s, m) { }
-        internal override EtatSession EtatSuivant() => this;
+        internal override EtatSession EtatSuivant() => new EtatFinal(sess);
     }
 }

@@ -39,8 +39,15 @@ namespace LogoffC
                 if (etat != value)
                 {
                     etat = value;
-                    // on signale le changement d'état
-                    if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
+                    if (etat is EtatFinal)
+                    {
+                        timer.Stop();
+                    }
+                    else
+                    {
+                        // on signale le changement d'état
+                        if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
+                    }
                 }
             }
         }
