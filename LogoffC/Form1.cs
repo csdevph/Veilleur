@@ -20,8 +20,8 @@ namespace LogoffC
         public Form1()
         {
             InitializeComponent();
-            Sess.TicTac += Minuteur;
             Sess.ChangeEtat += ChangeEtat;
+            Sess.TicTac += Minuteur;
         }
 
         private void ChangeEtat(object sender, EventArgs e)
@@ -29,16 +29,16 @@ namespace LogoffC
             switch (Sess.Etat)
             {
                 case enCours _:
-                    Session_enCours();
+                    Ecran_enCours();
                     break;
                 case enPause _:
-                    Session_enPause();
+                    Ecran_enPause();
                     break;
                 case enPreavis _:
-                    Session_enPreavis();
+                    Ecran_enPreavis();
                     break;
                 case enSursis _:
-                    Session_enSursis();
+                    Ecran_enSursis();
                     break;
                 default:
                     break;
@@ -54,30 +54,36 @@ namespace LogoffC
             if (notifyIcon1 != null) notifyIcon1.Text = Sess.Etat.GetType().Name + Sess.Etat.DureeEtat;
         }
 
-        private void Session_enCours()
-        {
-            this.Invoke(new MethodInvoker(
-                () => { this.Hide(); }
-            ));
-        }
-
-        private void Session_enPause()
+        private void Ecran_enCours()
         {
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    label1.Text = "";
+                    this.Opacity = .7;
                     this.Show();
                 }
             ));
         }
 
-        private void Session_enPreavis()
+        private void Ecran_enPause()
+        {
+            this.Invoke(new MethodInvoker(
+                () =>
+                {
+                    //label1.Text = "";
+                    this.Opacity = 1;
+                    this.Show();
+                }
+            ));
+        }
+
+        private void Ecran_enPreavis()
         {
             button1.Invoke(new MethodInvoker(
                 () =>
                 {
-                    label1.Text = "";
+                    //label1.Text = "";
+                    this.Opacity = 1;
                     button1.Enabled = false;
                     this.SetDesktopLocation(10, 0);
                     this.BackColor = Color.Orange;
@@ -92,12 +98,12 @@ namespace LogoffC
             //GC.Collect();
         }
 
-        private void Session_enSursis()
+        private void Ecran_enSursis()
         {
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    label1.Text = "";
+                    //label1.Text = "";
                     this.BackColor = Color.Orange;
                     this.SetDesktopLocation(50, 1);
                     this.Height = EcranHaut - 30 - 200;
@@ -116,7 +122,7 @@ namespace LogoffC
             if (this.Bottom > EcranHaut) this.Top = 5;
             if (this.Right > EcranLarg) this.Left = 5;
 
-            Sess.Etat = new enPause(Sess, 7);
+            //Sess.Etat = new enPause(Sess, 7);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -126,7 +132,7 @@ namespace LogoffC
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Session_enCours();
+            Ecran_enCours();
         }
 
         private void NotifyIcon1_Click(object sender, EventArgs e)
@@ -138,7 +144,7 @@ namespace LogoffC
             //}
             //else
             {
-                Session_enPause();
+                Ecran_enPause();
             }
         }
     }

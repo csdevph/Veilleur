@@ -36,10 +36,12 @@ namespace LogoffC
             get { return etat; }
             set
             {
-                etat = value;
-
-                // on signale le changement d'état
-                if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
+                if (etat != value)
+                {
+                    etat = value;
+                    // on signale le changement d'état
+                    if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
+                }
             }
         }
 
@@ -51,10 +53,11 @@ namespace LogoffC
         // Constructeur privé, pas d'instanciation manuelle du Singleton 
         private Session(int minutes = 60)
         {
-            timer.Elapsed += timer_Elapsed;
             duree = new TimeSpan(0, minutes, 0);
             HeureLimite = DateTime.Now + duree;
-            //etat = new enPause(this, 7);
+            timer.Elapsed += CompteARebours;
+            timer.Elapsed += timer_Elapsed;
+            etat = new EtatZero(this);
         }
         #endregion
 
@@ -64,6 +67,15 @@ namespace LogoffC
         {
             if (instance == null) instance = new Session();
             return instance;
+        }
+
+        private void CompteARebours(object sender, EventArgs e)
+        {
+            Etat.DureeEtat -= TimeSpan.FromSeconds(1);
+            if (Etat.DureeEtat < TimeSpan.Zero)
+            {
+                Etat = Etat.EtatSuivant();
+            }
         }
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
