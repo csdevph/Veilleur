@@ -20,7 +20,7 @@ namespace LogoffC
         internal event EventHandler TicTac;
         internal event EventHandler TicTacMinute;
 
-        internal const int preavisFin = 2;    // 5 minutes
+        internal const int preavisFin = 1;    // 5 minutes
         internal const int dureeSursis = 3;    // 15 minutes
         internal const int pauseMaxi = 1;    // 3 minutes
 
@@ -79,6 +79,10 @@ namespace LogoffC
         private void CompteARebours(object sender, EventArgs e)
         {
             Etat.DureeEtat -= TimeSpan.FromSeconds(1);
+            if (etat is enCours)
+            {
+                duree -= TimeSpan.FromSeconds(1);
+            }
             if (Etat.DureeEtat < TimeSpan.Zero)
             {
                 Etat = Etat.EtatSuivant();

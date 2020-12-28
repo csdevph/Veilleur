@@ -20,8 +20,8 @@ namespace LogoffC
         public Form1()
         {
             InitializeComponent();
-            Sess.ChangeEtat += ChangeEtat;
             Sess.TicTac += Minuteur;
+            Sess.ChangeEtat += ChangeEtat;
         }
 
         private void ChangeEtat(object sender, EventArgs e)
@@ -59,8 +59,8 @@ namespace LogoffC
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    this.Opacity = .7;
-                    this.Show();
+                    //this.Opacity = .7;
+                    this.Hide();
                 }
             ));
         }
@@ -70,8 +70,7 @@ namespace LogoffC
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    //label1.Text = "";
-                    this.Opacity = 1;
+                    //this.Opacity = 1;
                     this.Show();
                 }
             ));
@@ -82,8 +81,7 @@ namespace LogoffC
             button1.Invoke(new MethodInvoker(
                 () =>
                 {
-                    //label1.Text = "";
-                    this.Opacity = 1;
+                    //this.Opacity = 1;
                     button1.Enabled = false;
                     this.SetDesktopLocation(10, 0);
                     this.BackColor = Color.Orange;
@@ -103,7 +101,6 @@ namespace LogoffC
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    //label1.Text = "";
                     this.BackColor = Color.Orange;
                     this.SetDesktopLocation(50, 1);
                     this.Height = EcranHaut - 30 - 200;
@@ -121,8 +118,6 @@ namespace LogoffC
 
             if (this.Bottom > EcranHaut) this.Top = 5;
             if (this.Right > EcranLarg) this.Left = 5;
-
-            //Sess.Etat = new enPause(Sess, 7);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -130,21 +125,23 @@ namespace LogoffC
             //  ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, 0);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            Ecran_enCours();
+            Sess.Etat = new enCours(Sess);
         }
 
         private void NotifyIcon1_Click(object sender, EventArgs e)
         {
-            //if (DateTime.Now > Sess.HeureLimite)
-            //{
-            //    MessageBox.Show("Il est temps d'arrêter l'ordinateur...", "Session trop longue",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //}
-            //else
+            if (!(Sess.Etat is enCours)) return;
+
+            if (DateTime.Now > Sess.HeureLimite)
             {
-                Ecran_enPause();
+                MessageBox.Show("Il est temps d'arrêter l'ordinateur...", "Session trop longue",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                Sess.Etat = new enPause(Sess);
             }
         }
     }
