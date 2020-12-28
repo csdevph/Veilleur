@@ -72,7 +72,7 @@ namespace LogoffC
         // Accesseur retournant le Singleton
         public static Session Instance()
         {
-            if (instance == null) instance = new Session();
+            if (instance == null) instance = new Session(1);
             return instance;
         }
 

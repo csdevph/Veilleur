@@ -15,10 +15,10 @@ namespace LogoffC
 
         internal TimeSpan DureeEtat { get => dureeEtat; set => dureeEtat = value; }
 
-        internal EtatSession(Session s, int minutes)
+        internal EtatSession(Session s, TimeSpan d)
         {
             sess = s;
-            dureeEtat = new TimeSpan(0, 0, minutes);
+            dureeEtat = d;
         }
 
         internal abstract EtatSession EtatSuivant();
