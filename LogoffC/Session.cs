@@ -11,7 +11,7 @@ namespace LogoffC
     {
         #region Atttributs
 
-        private static Session instance = null;     // Singleton
+        private static Session instance;     // Singleton
         private EtatSession etat;
         private TimeSpan duree;
 
@@ -79,7 +79,7 @@ namespace LogoffC
         private void CompteARebours(object sender, EventArgs e)
         {
             Etat.DureeEtat -= TimeSpan.FromSeconds(1);
-            if (etat is enCours)
+            if (etat is EnCours)
             {
                 duree -= TimeSpan.FromSeconds(1);
             }

@@ -5,7 +5,7 @@ namespace LogoffC
     internal class EtatZero : EtatSession
     {
         public EtatZero(Session s) : base(s, TimeSpan.Zero) { }
-        internal override EtatSession EtatSuivant() => new enPause(sess);
+        internal override EtatSession EtatSuivant() => new EnPause(sess);
     }
 
     internal class EtatFinal : EtatSession
@@ -14,27 +14,27 @@ namespace LogoffC
         internal override EtatSession EtatSuivant() => this;
     }
 
-    internal class enPause : EtatSession
+    internal class EnPause : EtatSession
     {
-        public enPause(Session s) : base(s, new TimeSpan(0, Session.pauseMaxi, 0)) { }
-        internal override EtatSession EtatSuivant() => new enCours(sess);
+        public EnPause(Session s) : base(s, new TimeSpan(0, Session.pauseMaxi, 0)) { }
+        internal override EtatSession EtatSuivant() => new EnCours(sess);
     }
 
-    internal class enCours : EtatSession
+    internal class EnCours : EtatSession
     {
-        public enCours(Session s) : base(s, s.Duree) { }
-        internal override EtatSession EtatSuivant() => new enPreavis(sess);
+        public EnCours(Session s) : base(s, s.Duree) { }
+        internal override EtatSession EtatSuivant() => new EnPreavis(sess);
     }
 
-    internal class enPreavis : EtatSession
+    internal class EnPreavis : EtatSession
     {
-        public enPreavis(Session s) : base(s, new TimeSpan(0, Session.preavisFin, 0)) { }
-        internal override EtatSession EtatSuivant() => new enSursis(sess);
+        public EnPreavis(Session s) : base(s, new TimeSpan(0, Session.preavisFin, 0)) { }
+        internal override EtatSession EtatSuivant() => new EnSursis(sess);
     }
 
-    internal class enSursis : EtatSession
+    internal class EnSursis : EtatSession
     {
-        public enSursis(Session s) : base(s, new TimeSpan(0, 0, 5)) { }
+        public EnSursis(Session s) : base(s, new TimeSpan(0, 0, 5)) { }
         internal override EtatSession EtatSuivant() => new EtatFinal(sess);
     }
 }

@@ -28,17 +28,17 @@ namespace LogoffC
         {
             switch (Sess.Etat)
             {
-                case enCours _:
-                    Ecran_enCours();
+                case EnCours _:
+                    Ecran_EnCours();
                     break;
-                case enPause _:
-                    Ecran_enPause();
+                case EnPause _:
+                    Ecran_EnPause();
                     break;
-                case enPreavis _:
-                    Ecran_enPreavis();
+                case EnPreavis _:
+                    Ecran_EnPreavis();
                     break;
-                case enSursis _:
-                    Ecran_enSursis();
+                case EnSursis _:
+                    Ecran_EnSursis();
                     break;
                 default:
                     break;
@@ -54,7 +54,7 @@ namespace LogoffC
             if (notifyIcon1 != null) notifyIcon1.Text = Sess.Etat.GetType().Name + Sess.Etat.DureeEtat;
         }
 
-        private void Ecran_enCours()
+        private void Ecran_EnCours()
         {
             this.Invoke(new MethodInvoker(
                 () =>
@@ -65,7 +65,7 @@ namespace LogoffC
             ));
         }
 
-        private void Ecran_enPause()
+        private void Ecran_EnPause()
         {
             this.Invoke(new MethodInvoker(
                 () =>
@@ -76,7 +76,7 @@ namespace LogoffC
             ));
         }
 
-        private void Ecran_enPreavis()
+        private void Ecran_EnPreavis()
         {
             button1.Invoke(new MethodInvoker(
                 () =>
@@ -96,7 +96,7 @@ namespace LogoffC
             //GC.Collect();
         }
 
-        private void Ecran_enSursis()
+        private void Ecran_EnSursis()
         {
             this.Invoke(new MethodInvoker(
                 () =>
@@ -127,21 +127,22 @@ namespace LogoffC
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Sess.Etat = new enCours(Sess);
+            Sess.Etat = new EnCours(Sess);
         }
 
         private void NotifyIcon1_Click(object sender, EventArgs e)
         {
-            if (!(Sess.Etat is enCours)) return;
+            if (!(Sess.Etat is EnCours)) return;
 
             if (DateTime.Now > Sess.HeureLimite)
             {
+                this.notifyIcon1.Click -= NotifyIcon1_Click;
                 MessageBox.Show("Il est temps d'arrêter l'ordinateur...", "Session trop longue",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
-                Sess.Etat = new enPause(Sess);
+                Sess.Etat = new EnPause(Sess);
             }
         }
     }
