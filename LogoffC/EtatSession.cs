@@ -9,16 +9,14 @@ namespace LogoffC
     // Classe template
     abstract class EtatSession
     {
-        private TimeSpan dureeEtat;
-
         protected Session sess; // Contexte
 
-        internal TimeSpan DureeEtat { get => dureeEtat; set => dureeEtat = value; }
+        internal TimeSpan DureeEtat { get; set; }
 
         internal EtatSession(Session s, TimeSpan d)
         {
             sess = s;
-            dureeEtat = d;
+            DureeEtat = d;
         }
 
         internal abstract EtatSession EtatSuivant();
