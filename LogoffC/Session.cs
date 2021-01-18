@@ -30,29 +30,20 @@ namespace LogoffC
         {
             get => duree.ToString("h' h 'mm' min 'ss' s'");
         }
+        public TimeSpan Duree { get => duree; set => duree = value; }
 
         public EtatSession Etat
         {
             get { return etat; }
             set
             {
-                if (etat != value)
-                {
-                    etat = value;
-                    if (etat is EtatFinal)
-                    {
-                        timer.Stop();
-                    }
-                    else
-                    {
-                        // on signale le changement d'état
-                        if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
-                    }
-                }
+                if (etat == value) return;
+                etat = value;
+                if (etat is EtatFinal) timer.Stop();
+                // on signale le changement d'état
+                if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
             }
         }
-
-        public TimeSpan Duree { get => duree; set => duree = value; }
 
         #endregion
 
@@ -83,7 +74,7 @@ namespace LogoffC
             {
                 duree -= TimeSpan.FromSeconds(1);
             }
-            if (Etat.DureeEtat < TimeSpan.Zero)
+            if (Etat.DureeEtat <= TimeSpan.Zero)
             {
                 Etat = Etat.EtatSuivant();
             }

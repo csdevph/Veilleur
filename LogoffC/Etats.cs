@@ -23,18 +23,12 @@ namespace LogoffC
     internal class EnCours : EtatSession
     {
         public EnCours(Session s) : base(s, s.Duree) { }
-        internal override EtatSession EtatSuivant() => new EnPreavis(sess);
+        internal override EtatSession EtatSuivant() => new EnPreavisFin(sess);
     }
 
-    internal class EnPreavis : EtatSession
+    internal class EnPreavisFin : EtatSession
     {
-        public EnPreavis(Session s) : base(s, new TimeSpan(0, Session.preavisFin, 0)) { }
-        internal override EtatSession EtatSuivant() => new EnSursis(sess);
-    }
-
-    internal class EnSursis : EtatSession
-    {
-        public EnSursis(Session s) : base(s, new TimeSpan(0, 0, 5)) { }
+        public EnPreavisFin(Session s) : base(s, new TimeSpan(0, Session.preavisFin, 0)) { }
         internal override EtatSession EtatSuivant() => new EtatFinal(sess);
     }
 }

@@ -26,6 +26,8 @@ namespace LogoffC
 
         private void ChangeEtat(object sender, EventArgs e)
         {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} > {Sess.Etat.GetType().Name} ================");
+
             switch (Sess.Etat)
             {
                 case EnCours _:
@@ -34,11 +36,11 @@ namespace LogoffC
                 case EnPause _:
                     Ecran_EnPause();
                     break;
-                case EnPreavis _:
-                    Ecran_EnPreavis();
+                case EnPreavisFin _:
+                    Ecran_EnPreavisFin();
                     break;
-                case EnSursis _:
-                    Ecran_EnSursis();
+                case EtatFinal _:
+                    Ecran_EtatFinal();
                     break;
                 default:
                     break;
@@ -47,11 +49,13 @@ namespace LogoffC
 
         private void Minuteur(object sender, EventArgs e)
         {
-            Console.WriteLine("TicTac : Etat {0} : {1}", Sess.Etat.GetType(), Sess.Etat.DureeEtat);
+            Console.WriteLine($"TicTac   > {Sess.Etat.GetType().Name} : {Sess.Etat.DureeEtat}");
+            if (Sess.Etat is EnPause) return;
+
             label1.Invoke(new MethodInvoker
-                (() => { label1.Text = Sess.Etat.GetType().Name + " Durée de la session = " + Sess.Etat.DureeEtat; })
+                (() => { label1.Text = InfoDuree(); })
             );
-            if (notifyIcon1 != null) notifyIcon1.Text = Sess.Etat.GetType().Name + Sess.Etat.DureeEtat;
+            if (notifyIcon1 != null) notifyIcon1.Text = InfoDuree();
         }
 
         private void Ecran_EnCours()
@@ -76,7 +80,7 @@ namespace LogoffC
             ));
         }
 
-        private void Ecran_EnPreavis()
+        private void Ecran_EnPreavisFin()
         {
             button1.Invoke(new MethodInvoker(
                 () =>
@@ -96,7 +100,7 @@ namespace LogoffC
             //GC.Collect();
         }
 
-        private void Ecran_EnSursis()
+        private void Ecran_EtatFinal()
         {
             this.Invoke(new MethodInvoker(
                 () =>
@@ -118,6 +122,9 @@ namespace LogoffC
 
             if (this.Bottom > EcranHaut) this.Top = 5;
             if (this.Right > EcranLarg) this.Left = 5;
+
+            label1.Text = InfoDuree();
+            notifyIcon1.Text = InfoDuree();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -144,6 +151,11 @@ namespace LogoffC
             {
                 Sess.Etat = new EnPause(Sess);
             }
+        }
+
+        private String InfoDuree()
+        {
+            return "Durée de la session = " + Sess.Duree;
         }
     }
 }
