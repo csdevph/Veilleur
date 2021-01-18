@@ -16,7 +16,7 @@ namespace LogoffC
 
     internal class EnPause : EtatSession
     {
-        public EnPause(Session s) : base(s, new TimeSpan(0, Session.pauseMaxi, 0)) { }
+        public EnPause(Session s) : base(s, Session.DureePause) { }
         internal override EtatSession EtatSuivant() => new EnCours(sess);
     }
 
@@ -28,7 +28,7 @@ namespace LogoffC
 
     internal class EnPreavisFin : EtatSession
     {
-        public EnPreavisFin(Session s) : base(s, new TimeSpan(0, Session.preavisFin, 0)) { }
+        public EnPreavisFin(Session s) : base(s, Session.DureePreavisFin) { }
         internal override EtatSession EtatSuivant() => new EtatFinal(sess);
     }
 }

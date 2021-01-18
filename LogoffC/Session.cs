@@ -10,6 +10,8 @@ namespace LogoffC
     internal class Session
     {
         #region Atttributs
+        internal static TimeSpan DureePause = new TimeSpan(0, 0, 20);
+        internal static TimeSpan DureePreavisFin = new TimeSpan(0, 1, 0);
 
         private static Session instance;     // Singleton
         private EtatSession etat;
@@ -20,16 +22,8 @@ namespace LogoffC
         internal event EventHandler TicTac;
         internal event EventHandler TicTacMinute;
 
-        internal const int preavisFin = 1;    // 5 minutes
-        internal const int dureeSursis = 3;    // 15 minutes
-        internal const int pauseMaxi = 1;    // 3 minutes
-
         public DateTime HeureLimite;
 
-        public string DureeLisible
-        {
-            get => duree.ToString("h' h 'mm' min 'ss' s'");
-        }
         public TimeSpan Duree { get => duree; set => duree = value; }
 
         public EtatSession Etat
@@ -44,7 +38,6 @@ namespace LogoffC
                 if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
             }
         }
-
         #endregion
 
         #region Constructeurs
