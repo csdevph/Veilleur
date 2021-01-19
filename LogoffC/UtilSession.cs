@@ -7,60 +7,41 @@ using System.Text;
 namespace LogoffC
 {
     /// <summary>
-    /// sauvegrade
+    /// Support Windows
     /// </summary>
-    /// 
-    internal class UtilSession
+    internal static class UtilSession
     {
-        RegistryKey rk = Registry.CurrentUser.CreateSubKey("Recreation", true);
-        private TimeSpan duree;
-        public DateTime HeureLimite;
+        readonly static RegistryKey rk = Registry.CurrentUser.CreateSubKey("Recreation", true);
 
-        private void Session(int minutes = 60)
+        internal static int MinutesDisponibles()
         {
-            duree = new TimeSpan(0, minutes, 0);
+            DateTime jourAvant;
+            int dureeSession = (int)rk.GetValue("Duree", 60);
+            int restePrecedent = (int)rk.GetValue("Reste", dureeSession);
+            string chaineDate = (string)rk.GetValue("cejour");
 
-            DateTime CeJour;
-            int intDuree = (int)rk.GetValue("Duree", 60);
-            int intReste = (int)rk.GetValue("Reste", intDuree);
-            string strCeJour = (string)rk.GetValue("cejour");
+            DateTime.TryParse(chaineDate, out jourAvant);
 
-            DateTime.TryParse(strCeJour, out CeJour);
-
-            switch ((DateTime.Today - CeJour).TotalDays)
+            switch ((DateTime.Today - jourAvant).TotalDays)
             {
-                case 0: //Aujourd'hui
-                    if (intReste < 2) intReste = 2;
-                    break;
-                case 1: //Hier
-                    intReste += intDuree / 2;
-                    intReste = Math.Min(intReste, intDuree);
-                    break;
+                case 0: // Aujourd'hui
+                    return (restePrecedent < 2) ? 2 : restePrecedent;
+                case 1: // Hier
+                    restePrecedent += dureeSession / 2;
+                    return Math.Min(restePrecedent, dureeSession);
                 default:
-                    intReste = intDuree;
-                    break;
+                    return dureeSession;
             }
-
-            duree = new TimeSpan(0, intReste, 0);
-            HeureLimite = DateTime.Now + duree;
-
-            SauveDate();
-            SauveDuree();
         }
-        void SauveDate()
+
+        internal static void SauveDate()
         {
             rk.SetValue("CeJour", DateTime.Today.ToShortDateString(), RegistryValueKind.String);
         }
 
-        void SauveDuree()
+        internal static void SauveDuree(int minutes)
         {
-            rk.SetValue("Reste", NbMinutes(), RegistryValueKind.DWord);
+            rk.SetValue("Reste", minutes, RegistryValueKind.DWord);
         }
-        public int NbMinutes()
-        {
-            return (int)duree.TotalMinutes;
-
-        }
-
     }
 }

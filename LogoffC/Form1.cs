@@ -8,14 +8,10 @@ namespace LogoffC
     /// <summary>Occultation de l'écran</summary>
     public partial class Form1 : Form
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern bool ExitWindowsEx(uint uFlags, uint dwReason);
-        private const uint EWX_LOGOFF = 0;  //Log off the network
-        private const uint EWX_FORCE = 4;   //Force any applications to quit
-
         readonly int EcranLarg = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
         readonly int EcranHaut = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
         readonly Session Sess = Session.Instance(1);
+        //readonly Session Sess = Session.Instance(UtilSession.MinutesDisponibles());
 
         public Form1()
         {
@@ -110,6 +106,7 @@ namespace LogoffC
                     this.Height = EcranHaut - 30 - 200;
                     this.Width = (int)(EcranLarg * 0.95);
                     this.Show();
+                    this.Close();
                 }
             ));
         }
@@ -125,11 +122,13 @@ namespace LogoffC
 
             label1.Text = InfoDuree();
             notifyIcon1.Text = InfoDuree();
+
+            UtilSession.SauveDate();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //  ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, 0);
+            WinExit.ExitWindowsEx(WinExit.EWX_LOGOFF | WinExit.EWX_FORCE, 0);
         }
 
         private void Button1_Click(object sender, EventArgs e)
