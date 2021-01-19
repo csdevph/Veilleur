@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace LogoffC
 {
-    // Classe template
+    /// <summary>
+    /// Template pour les différents états d'une session
+    /// </summary>
     abstract class EtatSession
     {
         protected Session sess; // Contexte
 
-        internal TimeSpan DureeEtat { get; set; }
+        internal TimeSpan Duree { get; set; }
 
         internal EtatSession(Session s, TimeSpan d)
         {
             sess = s;
-            DureeEtat = d;
+            Duree = d;
         }
 
         internal abstract EtatSession EtatSuivant();

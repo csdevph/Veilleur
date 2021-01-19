@@ -10,8 +10,8 @@ namespace LogoffC
     internal class Session
     {
         #region Atttributs
-        internal static TimeSpan DureePause = new TimeSpan(0, 0, 20);
-        internal static TimeSpan DureePreavisFin = new TimeSpan(0, 1, 0);
+        internal static TimeSpan DureePause = new TimeSpan(0, 0, 10);
+        internal static TimeSpan DureePreavisFin = new TimeSpan(0, 0, 50);
 
         private static Session instance;     // Singleton
         private EtatSession etat;
@@ -24,7 +24,10 @@ namespace LogoffC
 
         public DateTime HeureLimite;
 
-        public TimeSpan Duree { get => duree; set => duree = value; }
+        /// <summary>
+        /// Durée de la sesssion. Elle s'écoule sur deux états : EnCours et EnPreavisFin
+        /// </summary>
+        public TimeSpan Duree { get => duree; }
 
         public EtatSession Etat
         {
@@ -42,38 +45,41 @@ namespace LogoffC
 
         #region Constructeurs
         // Constructeur privé, pas d'instanciation manuelle du Singleton 
-        private Session(int minutes = 60)
+        private Session(int minutes)
         {
             duree = new TimeSpan(0, minutes, 0);
             HeureLimite = DateTime.Now + duree;
             timer.Elapsed += CompteARebours;
-            timer.Elapsed += timer_Elapsed;
+            timer.Elapsed += Timer_Elapsed;
             etat = new EtatZero(this);
         }
         #endregion
 
         #region Méthodes
-        // Accesseur retournant le Singleton
-        public static Session Instance()
+        /// <summary>
+        /// Retourne l'instance de la session (Singleton)
+        /// </summary>
+        /// <param name="minutes">Durée de la session en minutes</param>
+        public static Session Instance(int minutes = 60)
         {
-            if (instance == null) instance = new Session(1);
+            if (instance == null) instance = new Session(minutes);
             return instance;
         }
 
         private void CompteARebours(object sender, EventArgs e)
         {
-            Etat.DureeEtat -= TimeSpan.FromSeconds(1);
-            if (etat is EnCours)
+            Etat.Duree -= TimeSpan.FromSeconds(1);
+            if (etat is EnCours || etat is EnPreavisFin)
             {
                 duree -= TimeSpan.FromSeconds(1);
             }
-            if (Etat.DureeEtat <= TimeSpan.Zero)
+            if (Etat.Duree <= TimeSpan.Zero)
             {
                 Etat = Etat.EtatSuivant();
             }
         }
 
-        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (TicTac != null) TicTac(this, new EventArgs());
             if (e.SignalTime.Second == 0)

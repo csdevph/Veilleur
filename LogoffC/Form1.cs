@@ -15,7 +15,7 @@ namespace LogoffC
 
         readonly int EcranLarg = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
         readonly int EcranHaut = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-        readonly Session Sess = Session.Instance();
+        readonly Session Sess = Session.Instance(1);
 
         public Form1()
         {
@@ -49,7 +49,7 @@ namespace LogoffC
 
         private void Minuteur(object sender, EventArgs e)
         {
-            Console.WriteLine($"TicTac   > {Sess.Etat.GetType().Name} : {Sess.Etat.DureeEtat}");
+            Console.WriteLine($"TicTac   > {Sess.Etat.GetType().Name} : {Sess.Etat.Duree}");
             if (Sess.Etat is EnPause) return;
 
             label1.Invoke(new MethodInvoker
