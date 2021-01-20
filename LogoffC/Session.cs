@@ -11,7 +11,7 @@ namespace LogoffC
     {
         #region Atttributs
         internal static TimeSpan DureePause = new TimeSpan(0, 0, 10);
-        internal static TimeSpan DureePreavisFin = new TimeSpan(0, 0, 50);
+        internal static TimeSpan DureePreavisFin = new TimeSpan(0, 1, 0);
 
         private static Session instance;     // Singleton
         private EtatSession etat;

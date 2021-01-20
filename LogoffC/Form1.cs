@@ -10,7 +10,6 @@ namespace LogoffC
     {
         readonly int EcranLarg = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
         readonly int EcranHaut = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-        //readonly Session Sess = Session.Instance(1);
         readonly Session Sess = Session.Instance(UtilSession.MinutesDisponibles());
 
         public Form1()
@@ -59,6 +58,17 @@ namespace LogoffC
             if (notifyIcon1 != null) notifyIcon1.Text = InfoDuree();
         }
 
+        private void BougeEcran(object sender, EventArgs e)
+        {
+            this.Invoke(new MethodInvoker(
+                () =>
+                {
+                    this.Left += 10;
+                    if (this.Right > EcranLarg) this.Left = 5;
+                }
+            ));
+        }
+
         private void Ecran_EnCours()
         {
             //this.Opacity = .7;
@@ -81,6 +91,8 @@ namespace LogoffC
             this.Width = 900;
             this.Show();
 
+            Sess.TicTac += BougeEcran;
+
             notifyIcon1.Icon = null;
             notifyIcon1 = null;
             //GC.Collect();
@@ -88,12 +100,14 @@ namespace LogoffC
 
         private void Ecran_EtatFinal()
         {
+            Sess.TicTac -= BougeEcran;
+
             this.BackColor = Color.Orange;
             this.SetDesktopLocation(50, 1);
             this.Height = EcranHaut - 30 - 200;
             this.Width = (int)(EcranLarg * 0.95);
             this.Show();
-            this.Close();
+            //this.Close();
         }
 
         private void Form1_Load(object sender, EventArgs e)
