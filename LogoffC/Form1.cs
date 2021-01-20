@@ -24,23 +24,28 @@ namespace LogoffC
         {
             Console.WriteLine($"{DateTime.Now:HH:mm:ss} > {Sess.Etat.GetType().Name} ================");
 
-            switch (Sess.Etat)
-            {
-                case EnCours _:
-                    Ecran_EnCours();
-                    break;
-                case EnPause _:
-                    Ecran_EnPause();
-                    break;
-                case EnPreavisFin _:
-                    Ecran_EnPreavisFin();
-                    break;
-                case EtatFinal _:
-                    Ecran_EtatFinal();
-                    break;
-                default:
-                    break;
-            }
+            this.Invoke(new MethodInvoker(
+                () =>
+                {
+                    switch (Sess.Etat)
+                    {
+                        case EnCours _:
+                            Ecran_EnCours();
+                            break;
+                        case EnPause _:
+                            Ecran_EnPause();
+                            break;
+                        case EnPreavisFin _:
+                            Ecran_EnPreavisFin();
+                            break;
+                        case EtatFinal _:
+                            Ecran_EtatFinal();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            ));
         }
 
         private void Minuteur(object sender, EventArgs e)
@@ -56,40 +61,25 @@ namespace LogoffC
 
         private void Ecran_EnCours()
         {
-            this.Invoke(new MethodInvoker(
-                () =>
-                {
-                    //this.Opacity = .7;
-                    this.Hide();
-                }
-            ));
+            //this.Opacity = .7;
+            this.Hide();
         }
 
         private void Ecran_EnPause()
         {
-            this.Invoke(new MethodInvoker(
-                () =>
-                {
-                    //this.Opacity = 1;
-                    this.Show();
-                }
-            ));
+            //this.Opacity = 1;
+            this.Show();
         }
 
         private void Ecran_EnPreavisFin()
         {
-            button1.Invoke(new MethodInvoker(
-                () =>
-                {
-                    //this.Opacity = 1;
-                    button1.Enabled = false;
-                    this.SetDesktopLocation(10, 0);
-                    this.BackColor = Color.Orange;
-                    this.Height = 50;
-                    this.Width = 900;
-                    this.Show();
-                }
-            ));
+            //this.Opacity = 1;
+            button1.Enabled = false;
+            this.SetDesktopLocation(10, 0);
+            this.BackColor = Color.Orange;
+            this.Height = 50;
+            this.Width = 900;
+            this.Show();
 
             notifyIcon1.Icon = null;
             notifyIcon1 = null;
@@ -98,17 +88,12 @@ namespace LogoffC
 
         private void Ecran_EtatFinal()
         {
-            this.Invoke(new MethodInvoker(
-                () =>
-                {
-                    this.BackColor = Color.Orange;
-                    this.SetDesktopLocation(50, 1);
-                    this.Height = EcranHaut - 30 - 200;
-                    this.Width = (int)(EcranLarg * 0.95);
-                    this.Show();
-                    this.Close();
-                }
-            ));
+            this.BackColor = Color.Orange;
+            this.SetDesktopLocation(50, 1);
+            this.Height = EcranHaut - 30 - 200;
+            this.Width = (int)(EcranLarg * 0.95);
+            this.Show();
+            this.Close();
         }
 
         private void Form1_Load(object sender, EventArgs e)
