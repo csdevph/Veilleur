@@ -12,25 +12,33 @@ namespace LogoffC
     internal static class UtilSession
     {
         readonly static RegistryKey rk = Registry.CurrentUser.CreateSubKey("Recreation", true);
-
+        /// <summary>
+        /// Définit la durée en fonction de la dernière session.
+        /// </summary>
+        /// <returns>Nombre de minutes</returns>
         internal static int MinutesDisponibles()
         {
             DateTime jourAvant;
-            int dureeSession = (int)rk.GetValue("Duree", 60);
-            int restePrecedent = (int)rk.GetValue("Reste", dureeSession);
+            int dureeMaxi = (int)rk.GetValue("Duree", 60);
+            int restePrecedent = (int)rk.GetValue("Reste", dureeMaxi);
             string chaineDate = (string)rk.GetValue("cejour");
 
             DateTime.TryParse(chaineDate, out jourAvant);
 
             switch ((DateTime.Today - jourAvant).TotalDays)
             {
-                case 0: // Aujourd'hui
-                    return (restePrecedent < 2) ? 2 : restePrecedent;
-                case 1: // Hier
-                    restePrecedent += dureeSession / 2;
-                    return Math.Min(restePrecedent, dureeSession);
+                case 0:
+                    // Connecté aujourd'hui : 
+                    // retourne la durée restante ou 5 minutes au minimum
+                    return (restePrecedent < 5) ? 5 : restePrecedent;
+                case 1:
+                    // Connecté hier : 
+                    // retourne la durée restante avec un bonus
+                    restePrecedent += dureeMaxi / 2;
+                    return (restePrecedent < dureeMaxi) ? restePrecedent : dureeMaxi;
                 default:
-                    return dureeSession;
+                    // retourne la durée entière
+                    return dureeMaxi;
             }
         }
 
