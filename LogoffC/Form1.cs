@@ -63,7 +63,8 @@ namespace LogoffC
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    this.Left += 10;
+                    if (DateTime.Now.Second % 10 != 0) return;
+                    this.Left += 50;
                     if (this.Right > EcranLarg) this.Left = 5;
                 }
             ));
@@ -101,7 +102,8 @@ namespace LogoffC
         private void Ecran_EtatFinal()
         {
             Sess.TicTac -= BougeEcran;
-
+            Sess.TicTac -= Minuteur;
+            label1.Text = "Fin de la session. Il faut se déconnecter maintenant !";
             this.BackColor = Color.Orange;
             this.SetDesktopLocation(50, 1);
             this.Height = EcranHaut - 30 - 200;
