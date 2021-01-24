@@ -10,7 +10,7 @@ namespace LogoffC
     {
         readonly int EcranLarg = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
         readonly int EcranHaut = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-        readonly Session Sess = Session.Instance(UtilSession.MinutesDisponibles());
+        readonly Session Sess = Session.Instance();
 
         public Form1()
         {

@@ -10,8 +10,8 @@ namespace LogoffC
     internal class Session
     {
         #region Atttributs
-        internal static TimeSpan DureePause = new TimeSpan(0, 0, 10);
-        internal static TimeSpan DureePreavisFin = new TimeSpan(0, 1, 0);
+        internal static TimeSpan DureePause = new TimeSpan(0, UtilSession.DureePause, 0);
+        internal static TimeSpan DureePreavisFin = new TimeSpan(0, UtilSession.DureePreavis, 0);
 
         private static Session instance;     // Singleton
         private EtatSession etat;
@@ -45,9 +45,9 @@ namespace LogoffC
 
         #region Constructeurs
         // Constructeur privé, pas d'instanciation manuelle du Singleton 
-        private Session(int minutes)
+        private Session()
         {
-            duree = new TimeSpan(0, minutes, 0);
+            duree = new TimeSpan(0, UtilSession.DureeSession, 0);
             HeureLimite = DateTime.Now + duree;
             timer.Elapsed += CompteARebours;
             timer.Elapsed += Timer_Elapsed;
@@ -60,9 +60,9 @@ namespace LogoffC
         /// Retourne l'instance de la session (Singleton)
         /// </summary>
         /// <param name="minutes">Durée de la session en minutes</param>
-        public static Session Instance(int minutes = 60)
+        public static Session Instance()
         {
-            if (instance == null) instance = new Session(minutes);
+            if (instance == null) instance = new Session();
             return instance;
         }
 
