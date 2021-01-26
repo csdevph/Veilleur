@@ -13,9 +13,9 @@ namespace LogoffC
     {
         readonly static RegistryKey rk = Registry.CurrentUser.CreateSubKey("Recreation", true);
 
-        internal static int DureeMaxi { get => (int)rk.GetValue("Duree", 60); }
-        internal static int DureePause { get => (int)rk.GetValue("Pause", 5); }
-        internal static int DureePreavis { get => (int)rk.GetValue("Preavis", 10); }
+        internal static int DureeMaxi { get => (int)rk.GetValue("DureeMaxi", 60); }
+        internal static int DureePause { get => (int)rk.GetValue("DureePause", 5); }
+        internal static int DureePreavis { get => (int)rk.GetValue("DureePreavis", 10); }
 
         /// <summary>
         /// Définit la durée en fonction de la dernière session.
@@ -25,38 +25,31 @@ namespace LogoffC
         {
             get
             {
-                DateTime jourAvant;
-                int restePrecedent = (int)rk.GetValue("Reste", DureeMaxi);
-                string chaineDate = (string)rk.GetValue("cejour");
+                int restePrecedent = (int)rk.GetValue("SessionReste", DureeMaxi);
+                string chaineDate = (string)rk.GetValue("SessionDate");
 
-                DateTime.TryParse(chaineDate, out jourAvant);
+                DateTime.TryParse(chaineDate, out DateTime jourAvant);
 
-                switch ((DateTime.Today - jourAvant).TotalDays)
+                if ((DateTime.Now - jourAvant).TotalHours < 12)
                 {
-                    case 0:
-                        // Connecté aujourd'hui : 
-                        // retourne la durée restante (ou du préavis au minimum)
-                        return (restePrecedent < DureePreavis) ? DureePreavis : restePrecedent;
-                    case 1:
-                        // Connecté hier : 
-                        // retourne la durée restante avec un bonus, sans dépasser la durée maxi
-                        restePrecedent += DureeMaxi / 2;
-                        return (restePrecedent < DureeMaxi) ? restePrecedent : DureeMaxi;
-                    default:
-                        // retourne la durée entière
-                        return DureeMaxi;
+                    // Connecté aujourd'hui : retourne la durée restante, ou du préavis au minimum
+                    return (restePrecedent < DureePreavis) ? DureePreavis : restePrecedent;
+                }
+                else
+                {
+                    return DureeMaxi;
                 }
             }
         }
 
         internal static void SauveDate()
         {
-            rk.SetValue("CeJour", DateTime.Today.ToShortDateString(), RegistryValueKind.String);
+            rk.SetValue("SessionDate", DateTime.Now.ToString(), RegistryValueKind.String);
         }
 
         internal static void SauveDuree(int minutes)
         {
-            rk.SetValue("Reste", minutes, RegistryValueKind.DWord);
+            rk.SetValue("SessionReste", minutes, RegistryValueKind.DWord);
         }
     }
 }
