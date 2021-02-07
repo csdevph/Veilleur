@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogoffC", "LogoffC\LogoffC.csproj", "{5EFCCF08-64C9-4193-A998-CF26542C366E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veilleur", "Veilleur\Veilleur.csproj", "{5EFCCF08-64C9-4193-A998-CF26542C366E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

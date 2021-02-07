@@ -1,4 +1,4 @@
-﻿namespace LogoffC
+﻿namespace Veilleur
 {
     partial class Form1
     {

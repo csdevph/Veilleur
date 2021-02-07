@@ -3,7 +3,7 @@ using System.CodeDom;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace LogoffC
+namespace Veilleur
 {
     /// <summary>Occultation de l'écran</summary>
     public partial class Form1 : Form

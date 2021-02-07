@@ -1,4 +1,4 @@
-﻿namespace LogoffC
+﻿namespace Veilleur
 {
     internal static class WinExit
     {

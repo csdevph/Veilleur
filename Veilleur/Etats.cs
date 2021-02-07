@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LogoffC
+namespace Veilleur
 {
     internal class EtatZero : EtatSession
     {

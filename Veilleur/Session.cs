@@ -2,7 +2,7 @@
 using System;
 using System.Timers;
 
-namespace LogoffC
+namespace Veilleur
 {
     /// <summary>
     /// Session de l'utilisateur

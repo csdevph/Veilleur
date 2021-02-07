@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogoffC
+namespace Veilleur
 {
     /// <summary>
     /// Template pour les différents états d'une session

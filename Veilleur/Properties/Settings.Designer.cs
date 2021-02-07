@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LogoffC.Properties {
+namespace Veilleur.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
