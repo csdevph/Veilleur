@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,8 +7,8 @@ namespace Veilleur
     /// <summary>Occultation de l'écran</summary>
     public partial class Form1 : Form
     {
-        readonly int EcranLarg = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
-        readonly int EcranHaut = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+        readonly int EcranLarg = (int)(Screen.PrimaryScreen.WorkingArea.Width * .95);
+        readonly int EcranHaut = (int)(Screen.PrimaryScreen.WorkingArea.Height * .95);
         readonly Session Sess = Session.Instance();
 
         public Form1()
@@ -80,6 +79,7 @@ namespace Veilleur
         {
             //this.Opacity = 1;
             this.Show();
+            this.Focus();
         }
 
         private void Ecran_EnPreavisFin()
@@ -94,9 +94,8 @@ namespace Veilleur
 
             Sess.TicTac += BougeEcran;
 
-            notifyIcon1.Icon = null;
-            notifyIcon1 = null;
-            //GC.Collect();
+            //notifyIcon1 = null;
+            notifyIcon1.Dispose();
         }
 
         private void Ecran_EtatFinal()
@@ -106,21 +105,22 @@ namespace Veilleur
             label1.Text = "Fin de la session. Il faut se déconnecter maintenant !";
             this.BackColor = Color.Orange;
             this.SetDesktopLocation(50, 1);
-            this.Height = EcranHaut - 30 - 200;
-            this.Width = (int)(EcranLarg * 0.95);
-            this.Show();
+            this.Height = EcranHaut;
+            this.Width = EcranLarg;
+            this.CenterToScreen();
             //this.Close();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Height = (int)(EcranHaut * 0.95);
-            this.Height = (int)(EcranHaut * 0.35);
-            this.Width = (int)(EcranLarg * 0.95);
+            this.Height = EcranHaut;
+            this.Width = EcranLarg;
+            this.CenterToScreen();
 
-            if (this.Bottom > EcranHaut) this.Top = 5;
-            if (this.Right > EcranLarg) this.Left = 5;
+            button1.Left = this.Width / 2 - button1.Width / 2;
 
+            label1.Width = EcranLarg - 100;
+            label1.Left = this.Width / 2 - label1.Width / 2;
             label1.Text = InfoDuree();
             notifyIcon1.Text = InfoDuree();
 
@@ -129,6 +129,12 @@ namespace Veilleur
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.TaskManagerClosing)
+            {
+                DialogResult res = MessageBox.Show("End task", "Alert", MessageBoxButtons.OK);
+            }
+            e.Cancel = true;
+            return;
             WinExit.ExitWindowsEx(WinExit.EWX_LOGOFF | WinExit.EWX_FORCE, 0);
         }
 
@@ -157,5 +163,6 @@ namespace Veilleur
         {
             return "Durée de la session = " + Sess.Duree;
         }
+
     }
 }
