@@ -131,11 +131,11 @@ namespace Veilleur
         {
             if (e.CloseReason == CloseReason.TaskManagerClosing)
             {
-                DialogResult res = MessageBox.Show("End task", "Alert", MessageBoxButtons.OK);
+                MessageBox.Show("End task", "Alert", MessageBoxButtons.OK);
             }
             e.Cancel = true;
             return;
-            WinExit.ExitWindowsEx(WinExit.EWX_LOGOFF | WinExit.EWX_FORCE, 0);
+            //WinExit.ExitWindowsEx(WinExit.EWX_LOGOFF | WinExit.EWX_FORCE, 0);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -163,6 +163,5 @@ namespace Veilleur
         {
             return "Durée de la session = " + Sess.Duree;
         }
-
     }
 }
