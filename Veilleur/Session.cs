@@ -15,8 +15,12 @@ namespace Veilleur
         private static Session instance;     // Singleton
         private EtatSession etat;
         private TimeSpan duree;
-
-        private readonly Timer timer = new Timer { Interval = 1000, Enabled = true };
+#if DEBUG
+        const double timerInterval = 200;
+#else
+        const double timerInterval = 1000;
+#endif
+        private readonly Timer timer = new Timer { Interval = timerInterval, Enabled = true };
         internal event EventHandler ChangeEtat;
         internal event EventHandler TicTac;
         internal event EventHandler TicTacMinute;
@@ -58,7 +62,6 @@ namespace Veilleur
         /// <summary>
         /// Retourne l'instance de la session (Singleton)
         /// </summary>
-        /// <param name="minutes">Durée de la session en minutes</param>
         public static Session Instance()
         {
             if (instance == null) instance = new Session();
