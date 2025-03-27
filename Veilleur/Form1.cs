@@ -9,23 +9,23 @@ namespace Veilleur
     {
         readonly int EcranLarg = (int)(Screen.PrimaryScreen.WorkingArea.Width * .95);
         readonly int EcranHaut = (int)(Screen.PrimaryScreen.WorkingArea.Height * .95);
-        readonly Session Sess = Session.Instance();
+        readonly Session session = Session.Instance();
 
         public Form1()
         {
             InitializeComponent();
-            Sess.TicTac += Minuteur;
-            Sess.ChangeEtat += ChangeEtat;
+            session.TicTac += Minuteur;
+            session.ChangeEtat += ChangeEtat;
         }
 
         private void ChangeEtat(object sender, EventArgs e)
         {
-            Console.WriteLine($"{DateTime.Now:HH:mm:ss} > {Sess.Etat.GetType().Name} ================");
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} > {session.Etat.GetType().Name} ================");
 
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    switch (Sess.Etat)
+                    switch (session.Etat)
                     {
                         case EnCours _:
                             Ecran_EnCours();
@@ -48,8 +48,8 @@ namespace Veilleur
 
         private void Minuteur(object sender, EventArgs e)
         {
-            Console.WriteLine($"TicTac   > {Sess.Etat.GetType().Name} : {Sess.Etat.Duree}");
-            if (Sess.Etat is EnPause) return;
+            Console.WriteLine($"TicTac   > {session.Etat.GetType().Name} : {session.Etat.Duree}");
+            if (session.Etat is EnPause) return;
 
             label1.Invoke(new MethodInvoker
                 (() => { label1.Text = InfoDuree(); })
@@ -92,7 +92,7 @@ namespace Veilleur
             this.Width = 900;
             this.Show();
 
-            Sess.TicTac += BougeEcran;
+            session.TicTac += BougeEcran;
 
             //notifyIcon1 = null;
             notifyIcon1.Dispose();
@@ -100,8 +100,8 @@ namespace Veilleur
 
         private void Ecran_EtatFinal()
         {
-            Sess.TicTac -= BougeEcran;
-            Sess.TicTac -= Minuteur;
+            session.TicTac -= BougeEcran;
+            session.TicTac -= Minuteur;
             label1.Text = "Fin de la session. Il faut se déconnecter maintenant !";
             this.BackColor = Color.Orange;
             this.SetDesktopLocation(50, 1);
@@ -140,14 +140,14 @@ namespace Veilleur
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            Sess.Etat = new EnCours(Sess);
+            session.Etat = new EnCours(session);
         }
 
         private void NotifyIcon1_Click(object sender, EventArgs e)
         {
-            if (!(Sess.Etat is EnCours)) return;
+            if (!(session.Etat is EnCours)) return;
 
-            if (DateTime.Now > Sess.HeureLimite)
+            if (DateTime.Now > session.HeureLimite)
             {
                 this.notifyIcon1.Click -= NotifyIcon1_Click;
                 MessageBox.Show("Il est temps d'arrêter l'ordinateur...", "Session trop longue",
@@ -155,13 +155,13 @@ namespace Veilleur
             }
             else
             {
-                Sess.Etat = new EnPause(Sess);
+                session.Etat = new EnPause(session);
             }
         }
 
         private String InfoDuree()
         {
-            return "Durée de la session = " + Sess.Duree;
+            return "Durée de la session = " + session.Duree;
         }
     }
 }

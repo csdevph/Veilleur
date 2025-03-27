@@ -5,7 +5,7 @@ namespace Veilleur
     internal class EtatZero : EtatSession
     {
         public EtatZero(Session s) : base(s, TimeSpan.Zero) { }
-        internal override EtatSession EtatSuivant() => new EnPause(sess);
+        internal override EtatSession EtatSuivant() => new EnPause(session);
     }
 
     internal class EtatFinal : EtatSession
@@ -15,13 +15,13 @@ namespace Veilleur
     }
 
     /// <summary>
-    /// L'utilisateur peut suspendre sa session.
+    /// L'utilisateur peut mettre en pause sa session.
     /// La durée de la pause est limitée.
     /// </summary>
     internal class EnPause : EtatSession
     {
         public EnPause(Session s) : base(s, Session.DureePause) { }
-        internal override EtatSession EtatSuivant() => new EnCours(sess);
+        internal override EtatSession EtatSuivant() => new EnCours(session);
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ namespace Veilleur
     internal class EnCours : EtatSession
     {
         public EnCours(Session s) : base(s, s.Duree - Session.DureePreavisFin) { }
-        internal override EtatSession EtatSuivant() => new EnPreavisFin(sess);
+        internal override EtatSession EtatSuivant() => new EnPreavisFin(session);
     }
 
     /// <summary>
@@ -40,6 +40,6 @@ namespace Veilleur
     internal class EnPreavisFin : EtatSession
     {
         public EnPreavisFin(Session s) : base(s, Session.DureePreavisFin) { }
-        internal override EtatSession EtatSuivant() => new EtatFinal(sess);
+        internal override EtatSession EtatSuivant() => new EtatFinal(session);
     }
 }

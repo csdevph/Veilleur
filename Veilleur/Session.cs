@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Timers;
 
 namespace Veilleur
@@ -38,7 +37,7 @@ namespace Veilleur
                 etat = value;
                 if (etat is EtatFinal) timer.Stop();
                 // on signale le changement d'état
-                if (ChangeEtat != null) ChangeEtat(this, new EventArgs());
+                ChangeEtat?.Invoke(this, new EventArgs());
             }
         }
         #endregion
@@ -81,10 +80,10 @@ namespace Veilleur
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (TicTac != null) TicTac(this, new EventArgs());
+            TicTac?.Invoke(this, new EventArgs());
             if (e.SignalTime.Second == 0)
             {
-                if (TicTacMinute != null) TicTacMinute(this, new EventArgs());
+                TicTacMinute?.Invoke(this, new EventArgs());
             }
         }
         #endregion
