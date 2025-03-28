@@ -1,8 +1,5 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Veilleur
 {
@@ -13,7 +10,7 @@ namespace Veilleur
     {
         readonly static RegistryKey rk = Registry.CurrentUser.CreateSubKey("Recreation", true);
 
-        internal static int DureeMaxi { get => (int)rk.GetValue("DureeMaxi", 60); }
+        internal static int DureeMaxi { get => (int)rk.GetValue("DureeMaxi", 150); }
         internal static int DureePause { get => (int)rk.GetValue("DureePause", 5); }
         internal static int DureePreavis { get => (int)rk.GetValue("DureePreavis", 10); }
 
@@ -25,14 +22,13 @@ namespace Veilleur
         {
             get
             {
-                int restePrecedent = (int)rk.GetValue("SessionReste", DureeMaxi);
                 string chaineDate = (string)rk.GetValue("SessionDate");
-
                 DateTime.TryParse(chaineDate, out DateTime jourAvant);
 
                 if ((DateTime.Now - jourAvant).TotalHours < 12)
                 {
-                    // Connecté aujourd'hui : retourne la durée restante, ou du préavis au minimum
+                    // Connecté aujourd'hui : retourne la durée restante ou du préavis
+                    int restePrecedent = (int)rk.GetValue("SessionReste", DureeMaxi);
                     return (restePrecedent < DureePreavis) ? DureePreavis : restePrecedent;
                 }
                 else
