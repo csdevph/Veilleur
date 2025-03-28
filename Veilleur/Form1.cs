@@ -16,6 +16,7 @@ namespace Veilleur
             InitializeComponent();
             session.TicTac += Minuteur;
             session.ChangeEtat += ChangeEtat;
+            session.TicTacMinute += (s, e) => { UtilSession.SauveDuree((int)session.Duree.TotalMinutes); };
         }
 
         private void ChangeEtat(object sender, EventArgs e)
