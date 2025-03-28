@@ -62,7 +62,7 @@ namespace Veilleur
             this.Invoke(new MethodInvoker(
                 () =>
                 {
-                    if (DateTime.Now.Second % 10 != 0) return;
+                    if (session.Duree.Seconds % 10 != 0) return;
                     this.Left += 50;
                     if (this.Right > EcranLarg) this.Left = 5;
                 }
@@ -86,10 +86,11 @@ namespace Veilleur
         {
             //this.Opacity = 1;
             button1.Enabled = false;
+            label1.AutoSize = true;
             this.SetDesktopLocation(10, 0);
             this.BackColor = Color.Orange;
             this.Height = 50;
-            this.Width = 900;
+            this.Width = label1.Width + 100;
             this.Show();
 
             session.TicTac += BougeEcran;
