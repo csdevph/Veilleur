@@ -129,17 +129,6 @@ namespace Veilleur
             UtilSession.SauveDate();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.TaskManagerClosing)
-            {
-                MessageBox.Show("End task", "Alert", MessageBoxButtons.OK);
-            }
-            e.Cancel = true;
-            return;
-            //WinExit.ExitWindowsEx(WinExit.EWX_LOGOFF | WinExit.EWX_FORCE, 0);
-        }
-
         private void Button1_Click(object sender, EventArgs e)
         {
             session.Etat = new EnCours(session);
